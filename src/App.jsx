@@ -114,7 +114,7 @@ function App() {
   
       const network = await provider.getNetwork();
       // console.log("Current network:", network);
-      const allowedNetworks = [56, 97]; // Array of allowed network chainIds
+      const allowedNetworks = [56,]; // Array of allowed network chainIds
   
       if (!allowedNetworks.includes(network.chainId)) {
         setErrorMessage("Please switch to the Binance mainnet to claim the airdrop.");
