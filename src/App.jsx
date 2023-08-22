@@ -99,7 +99,7 @@ function App() {
 
     setTimeout(() => {
       removeNotification(newNotification);
-    }, 20000);
+    }, 5000);
   };
 
   const removeNotification = (notificationToRemove) => {
@@ -169,7 +169,7 @@ function App() {
     if (notifications.length > 0) {
       const timer = setTimeout(() => {
         setNotifications([]);
-      }, 20000);
+      }, 5000);
       return () => clearTimeout(timer);
     }
   }, [notifications]);
