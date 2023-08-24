@@ -208,7 +208,7 @@ function App() {
         {/* Form */}
         <Form eligibleAddresses={eligibleAddresses} setNotifications={setNotifications} />
         
-        <div className="referal">
+        {/* <div className="referal">
           <div className="container">
             <button
               className="btn"
@@ -228,7 +228,7 @@ function App() {
               Claim Airdrop
             </button>
           </div>
-        </div>
+        </div> */}
 
         <div style={{ position: "fixed", top: "20px", right: "20px", display: "flex", flexDirection: "column", alignItems: "flex-end", zIndex: "999" }}>
         
