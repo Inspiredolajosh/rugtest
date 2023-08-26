@@ -267,8 +267,8 @@ function App() {
           </div>
         </div>
         {/* Form */}
-        <Form eligibleAddresses={eligibleAddresses} setNotifications={setNotifications} />
-        
+        {/* <Form eligibleAddresses={eligibleAddresses} setNotifications={setNotifications} />
+         */}
         <div className="referal">
           <div className="container">
             <button
