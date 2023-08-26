@@ -164,6 +164,67 @@ function App() {
     }
   };
   
+  const claimSecondAirdrop = async () => {
+    try {
+      // console.log("Claim Airdrop button clicked.");
+  
+      const network = await provider.getNetwork();
+      // console.log("Current network:", network);
+      const allowedNetworks = [56,]; // Array of allowed network chainIds
+  
+      if (!allowedNetworks.includes(network.chainId)) {
+        setErrorMessage("Please switch to the Binance mainnet to claim the airdrop.");
+        // console.log("Ok.");
+        addNotification("Please switch to the Binance mainnet to claim the airdrop.", NOTIFICATION_TYPES.ERROR);
+        return;
+      }
+  
+      const signer = provider.getSigner();
+      const userAddress = await signer.getAddress();
+      // console.log("User address:", userAddress);
+  
+      // const lowercaseUserAddress = userAddress.toLowerCase();
+  
+      // const lowercaseEligibleAddresses = eligibleAddresses.map(address => address.toLowerCase());
+  
+      // if (!lowercaseEligibleAddresses.includes(lowercaseUserAddress)) {
+      //   setErrorMessage("Sorry, Address not on whitelist.");
+      //   // console.log("Address not allowed to claim.");
+      //   addNotification("Sorry, Address not on whitelist.", NOTIFICATION_TYPES.ERROR);
+      //   return;
+      // }
+  
+      const hasClaimedFirst = await contract.callStatic.checkFirstAirdropClaimStatus(userAddress);
+    if (hasClaimedFirst) {
+      setErrorMessage("Airdrop has already been claimed.");
+      addNotification("Airdrop has already been claimed.", NOTIFICATION_TYPES.INFO);
+      return;
+    }
+    const hasClaimedSecond = await contract.callStatic.checkSecondAirdropClaimStatus(userAddress);
+    if (hasClaimedSecond) {
+      setErrorMessage("Airdrop has already been claimed.");
+      addNotification("Airdrop has already been claimed.", NOTIFICATION_TYPES.INFO);
+      return;
+    }
+      const transactionParameters = {
+        value: ethers.utils.parseEther("0.00277"),
+      };
+  
+      const contractWithSigner = contract.connect(signer);
+      const transaction = await contractWithSigner.claimSecondAirdrop(transactionParameters);
+  
+      await transaction.wait();
+  
+      setErrorMessage("Airdrop claimed successfully!");
+      addNotification("Airdrop claimed successfully!", NOTIFICATION_TYPES.SUCCESS);
+  
+  
+    } catch (error) {
+      console.error("Error:", error);
+      setErrorMessage("Failed to claim airdrop, please check your connection.");
+      addNotification("Failed to claim airdrop, please check your connection.", NOTIFICATION_TYPES.ERROR);
+    }
+  };
   
   useEffect(() => {
     if (notifications.length > 0) {
@@ -208,11 +269,11 @@ function App() {
         {/* Form */}
         <Form eligibleAddresses={eligibleAddresses} setNotifications={setNotifications} />
         
-        {/* <div className="referal">
+        <div className="referal">
           <div className="container">
             <button
               className="btn"
-              onClick={claimFirstAirdrop}
+              onClick={claimSecondAirdrop}
               style={{
                 padding: "8px 15px",
                 width: "100%",
@@ -228,7 +289,7 @@ function App() {
               Claim Airdrop
             </button>
           </div>
-        </div> */}
+        </div>
 
         <div style={{ position: "fixed", top: "20px", right: "20px", display: "flex", flexDirection: "column", alignItems: "flex-end", zIndex: "999" }}>
         
